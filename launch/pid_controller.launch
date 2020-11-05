@@ -1,7 +1,7 @@
 <launch>
 
   <group ns="controls">
-    <node pkg="pid_controller" name="myControl" type="pid_controller_node"/>
+    <node pkg="pid_controller" name="pid_controller" type="pid_controller_node" output="screen"></node>
   </group>
 
 </launch>
