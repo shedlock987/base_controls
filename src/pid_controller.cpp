@@ -28,7 +28,6 @@
  * @author Ryan Shedlock <rmshedlock@gmail.com>
  * @version 1.0
  */
-#define STEP_TIME_S 0.01
 
 #include "pid_controller/pid_controller.h"
 
@@ -42,8 +41,10 @@ namespace controls
         pout_ = 0.0F;
         iout_ = 0.0F;
         dout_ = 0.0F;
+        error_ = 0.0F;
         i_unitdelay_ = 0.0F;
-        err_unitdelay_ = 0;
+        err_unitdelay_ = 0.0F;
+        fltr_coef_ = 1.0F;
         dfltr_unitdelay_ = init_val_;
         err_unitdelay_ = init_val_;
         cmd_= init_val_;
@@ -89,16 +90,15 @@ namespace controls
         this->Update_D_Filter(_fltr_coef);
     }
 
+    PID_Controller::~PID_Controller()
+    {
+    }
+
     double PID_Controller::Step(double &_error)
     {
         error_ = _error;
         double tmp = 0;
         double tmp_d = 0;
-
-        //dT = do sys time delta here
-        #ifdef STEP_TIME_S
-        dt_ = STEP_TIME_S;
-        #endif
 
         if(enabled_)
         {
@@ -123,7 +123,7 @@ namespace controls
                 }
 
                 /* Calculate Differential Gain, Apply 1st Order Digital LPF */
-                tmp_d = (error_  - err_unitdelay_) * kd_ / dt_;
+                tmp_d = ((error_  - err_unitdelay_) * kd_) / dt_;
                 dout_ = dfltr_unitdelay_ + ((tmp_d - dfltr_unitdelay_) * fltr_coef_);
                 dfltr_unitdelay_ = tmp_d;
 
@@ -131,7 +131,7 @@ namespace controls
                 pout_ = error_ * kp_;
 
                 /* Calculate PID Controller Command, Apply Limits */
-                cmd_= pout_ + iout_ + dout_;
+                cmd_= pout_ + iout_ + dout_; 
                 if(cmd_> cmdmax_)
                 {
                     cmd_= cmdmax_;
