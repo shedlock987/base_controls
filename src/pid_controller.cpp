@@ -42,11 +42,11 @@ namespace controls
         iout_ = 0.0F;
         dout_ = 0.0F;
         error_ = 0.0F;
+        fltr_coef_ = 1.0F;
         i_unitdelay_ = 0.0F;
         err_unitdelay_ = 0.0F;
-        fltr_coef_ = 1.0F;
-        dfltr_unitdelay_ = init_val_;
-        err_unitdelay_ = init_val_;
+        dfltr_unitdelay_ = 0.0F;
+        err_unitdelay_ = 0.0F;
         cmd_= init_val_;
     }
 
@@ -78,6 +78,12 @@ namespace controls
     {
         fltr_coef_ = _fltr_coef;
     }
+    
+    void PID_Controller::Update_InitVal(double &_init_val)
+    {
+        init_val_ = _init_val;
+    }
+
 
     PID_Controller::PID_Controller(double &_kp, double &_ki, double &_kd, double &_cmdmax, double &_cmdmin, double &_imax, double &_imin, double &_init_val, double &_fltr_coef)
     {
@@ -152,7 +158,12 @@ namespace controls
             {
                 /* If Reset, Re-initialize Controller, Set cmd_to Init Value */
                 reset_ = false;
-                this->Init();
+                i_unitdelay_ = 0.0F;
+                err_unitdelay_ = 0.0F;
+                dfltr_unitdelay_ = init_val_;
+                error_ = 0.0F;
+                err_unitdelay_ = 0.0F;
+                cmd_= init_val_;
             }
         }
         else 
