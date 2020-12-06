@@ -64,14 +64,30 @@ namespace controls
 
     void PID_Controller::Update_Sat_Limit(double &_cmdmax, double &_cmdmin)
     {
-        cmdmax_ = _cmdmax;
-        cmdmin_ = _cmdmin;
+        if(_cmdmax >= _cmdmin)
+        {
+            cmdmax_ = _cmdmax;
+            cmdmin_ = _cmdmin;
+        }
+        else
+        {
+            cmdmax_ = _cmdmin;
+            cmdmin_ = _cmdmax;
+        }
     }
 
     void PID_Controller::Update_I_Sat_Limit(double &_imax, double &_imin)
     {
-        imax_ = _imax;
-        imin_ = _imin;
+        if(_imax >= _imin)
+        {
+            imax_ = _imax;
+            imin_ = _imin;
+        }
+        else
+        {
+            imax_ = _imin;
+            imin_ = _imax;
+        }
     }
 
     void PID_Controller::Update_D_Filter(double &_fltr_coef)
@@ -129,9 +145,11 @@ namespace controls
                 }
 
                 /* Calculate Differential Gain, Apply 1st Order Digital LPF */
-                tmp_d = ((error_  - err_unitdelay_) * kd_) / dt_;
-                dout_ = dfltr_unitdelay_ + ((tmp_d - dfltr_unitdelay_) * fltr_coef_);
-                dfltr_unitdelay_ = tmp_d;
+                tmp_d = (error_  - err_unitdelay_) / dt_;
+                dout_ = (dfltr_unitdelay_ + ((tmp_d - dfltr_unitdelay_) * fltr_coef_));
+                dfltr_unitdelay_ = dout_;
+                dout_ = dout_*kd_;
+
 
                 /* Calculate Porportional Gain */
                 pout_ = error_ * kp_;
