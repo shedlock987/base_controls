@@ -14,9 +14,13 @@ doxygen Doxyfile
 The follwing dependencies are required, and can be installed accordingly.
 
 sudo apt install doxygen
+
 sudo apt install libgtest-dev
+
 sudo apt install build-essential
+
 sudo apt install python-catkin-tools
+
 sudo apt install ros-noetic-desktop-full (Includes required Eigen3 library)
 
 # Running the tests
