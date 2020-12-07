@@ -157,7 +157,6 @@ namespace controls
         double err_unitdelay_;
         double i_unitdelay_;
         double dfltr_unitdelay_;
-        double t_minus_;
         /* Discrete Time Unit Delay (1/z) Data Stores */
         
     };

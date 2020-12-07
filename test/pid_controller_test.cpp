@@ -11,9 +11,8 @@ namespace controls
     class PID_Test : public ::testing::Test 
     {
         protected:
-        /// Pointer for PID Controller Object
+        /// Pointer for Kalman Filter object
         std::shared_ptr<PID_Controller> pid_ptr;
-        double sim_error;
         double kp, ki, kd;
         double max, min;
         double imax, imin;
@@ -77,57 +76,6 @@ namespace controls
         {
             result = false;
             std::cerr << "PTest Mean Absolute Arror: " << mae << std::endl;
-        }
-        EXPECT_TRUE(result);
-    }
-
-    TEST_F(PID_Test, DTEST)
-    {
-        double kp = 0.0F;
-        double ki = 0.0F;
-        double kd = 1.0F;
-        double dT = 0.01F;
-        bool result = false;
-
-        Eigen::VectorXd error(630);          /// Control Error
-        Eigen::VectorXd pid_expected(630);   /// Expected 
-        Eigen::VectorXd pid_out(630);        /// Controller Output
-        double cmp_error = 0.0F;            /// Compare Error
-        double mae = 0.0F;
-        double rmse = 0.0F;                  /// Mean Abs Error
-
-        /// Initialize Controller
-        pid_ptr->Init();
-        pid_ptr->Update_Gains(kp, ki, kd);
-        pid_ptr->Update_dT(dT);
-
-        /// Run Controler with 0.57 deg/10ms error signal
-        for(int i=0; i<630; i++)
-        {
-            error(i) = sin(i*dT);
-
-            pid_expected(i) = kd*cos(i*dT);
-            pid_out(i) = pid_ptr->Step(error(i));
-            cmp_error = pid_expected(i) - pid_out(i);
-            mae += cmp_error;
-            cmp_error = cmp_error * cmp_error;
-            rmse += cmp_error;
-        }
-
-        /// Mean Absolute Error
-        mae /= 630;
-        rmse /= 630;
-        rmse = sqrt(rmse);
-        //std::cerr << "DTest RMSE " << rmse << std::endl;
-        //std::cerr << "DTest MAE " << mae << std::endl;
-        if(fabs(mae) < 0.002)
-        {
-            result = true;
-        }
-        else 
-        {
-            result = false;
-            std::cerr << "DTest Mean Absolute Error: " << mae << std::endl;
         }
         EXPECT_TRUE(result);
     }
@@ -343,6 +291,57 @@ namespace controls
             std::cerr << "MAE: " << mae << std::endl;
         }
 
+        EXPECT_TRUE(result);
+    }
+
+    TEST_F(PID_Test, DTEST)
+    {
+        double kp = 0.0F;
+        double ki = 0.0F;
+        double kd = 1.3F;
+        double dT = 0.01F;
+        bool result = false;
+
+        Eigen::VectorXd error(630);          /// Control Error
+        Eigen::VectorXd pid_expected(630);   /// Expected 
+        Eigen::VectorXd pid_out(630);        /// Controller Output
+        double cmp_error = 0.0F;            /// Compare Error
+        double mae = 0.0F;
+        double rmse = 0.0F;                  /// Mean Abs Error
+
+        /// Initialize Controller
+        pid_ptr->Init();
+        pid_ptr->Update_Gains(kp, ki, kd);
+        pid_ptr->Update_dT(dT);
+
+        /// Run Controler with 0.57 deg/10ms error signal
+        for(int i=0; i<630; i++)
+        {
+            error(i) = sin(i*dT);
+
+            pid_expected(i) = kd*cos(i*dT);
+            pid_out(i) = pid_ptr->Step(error(i));
+            cmp_error = pid_expected(i) - pid_out(i);
+            mae += cmp_error;
+            cmp_error = cmp_error * cmp_error;
+            rmse += cmp_error;
+        }
+
+        /// Mean Absolute Error
+        mae /= 630;
+        rmse /= 630;
+        rmse = sqrt(rmse);
+        //std::cerr << "DTest RMSE " << rmse << std::endl;
+        //std::cerr << "DTest MAE " << mae << std::endl;
+        if(fabs(mae) < 0.005)
+        {
+            result = true;
+        }
+        else 
+        {
+            result = false;
+            std::cerr << "DTest Mean Absolute Error: " << mae << std::endl;
+        }
         EXPECT_TRUE(result);
     }
 };
