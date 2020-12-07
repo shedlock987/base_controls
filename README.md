@@ -31,7 +31,7 @@ catkin build pid_controller --no-deps --catkin-make-args run_tests
 Break down into end to end tests
 The PID Controller test verifies basic functionality 
 
-pid_controller_test_test.cpp 
+pid_controller_test.cpp 
 
 # Built With
 catkin_tools - Build tool used for compiling this project
