@@ -11,7 +11,7 @@ namespace controls
     class PID_Test : public ::testing::Test 
     {
         protected:
-        /// Pointer for Kalman Filter object
+        /// Pointer for PID Controller Object
         std::shared_ptr<PID_Controller> pid_ptr;
         double sim_error;
         double kp, ki, kd;
