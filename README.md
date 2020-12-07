@@ -8,6 +8,7 @@ These instructions will help you generate the necessary documentation for using 
 The documentation for this project is Doxygen based. To generate, execute the following commands:
 
 cd <path>/base_controls
+
 doxygen Doxyfile
   
 # Dependencies
@@ -29,6 +30,7 @@ To compile unit and pipeline tests, use the following command:
 catkin build pid_controller --no-deps --catkin-make-args run_tests
 
 Break down into end to end tests
+
 The PID Controller test verifies basic functionality 
 
 pid_controller_test.cpp 
