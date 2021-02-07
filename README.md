@@ -35,10 +35,19 @@ The PID Controller test verifies basic functionality
 
 pid_controller_test.cpp 
 
-# Built With
-catkin_tools - Build tool used for compiling this project
-Google Test - Unit testing framework
-ros_noetic - Open source meta-operating system
-Authors
-Ryan Shedlock
+## Built With
+
+* [catkin_tools](https://catkin-tools.readthedocs.io/en/latest/index.html) - Build tool used for compiling this project
+* [Google Test](https://github.com/google/googletest) - Unit testing framework
+* [ros_noetic](http://wiki.ros.org/noetic) - Open source meta-operating system
+
+
+## Authors
+
+* **Ryan Shedlock**
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details
+
 
